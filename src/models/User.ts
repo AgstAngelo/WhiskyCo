@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import { Request } from "express";
 
 interface IUser {
   name: string;
@@ -22,6 +23,15 @@ const userSchema = new Schema<IUser>(
     timestamps: true,
   }
 );
+
+// Extend the Request interface to include the user property
+declare global {
+  namespace Express {
+    interface Request {
+      user?: IUser;
+    }
+  }
+}
 
 const User = model<IUser>("User", userSchema);
 

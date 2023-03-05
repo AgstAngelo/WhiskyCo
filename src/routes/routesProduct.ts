@@ -1,11 +1,13 @@
 import { Router } from "express";
 import controller from "../controllers/controllerProduct";
+import isAdmin from "../middlewares/isAdmin";
+
 const routes = Router();
 
-routes.post("/product", controller.create);
+routes.post("/product", isAdmin, controller.create);
 routes.get("/product", controller.findAll);
-//routes.get("/product/:id", controller.findOne);
-//routes.put("/product/:id", controller.update);
-//routes.delete("/product/:id", controller.delete);
+routes.get("/product/:id", controller.findOne);
+routes.put("/product/:id", isAdmin, controller.update);
+routes.delete("/product/:id", isAdmin, controller.delete);
 
 export default routes;

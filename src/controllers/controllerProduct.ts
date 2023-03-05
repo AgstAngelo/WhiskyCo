@@ -4,7 +4,7 @@ import { Product } from "../models";
 const controller = {
   async create(req: Request, res: Response) {
     const { name, picture, price, description, category } = req.body;
-
+    
     const newProduct = await Product.create({
         name,
         picture,
@@ -22,6 +22,47 @@ const controller = {
     });
 
     return res.json(products);
+  },
+  async findOne(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const product = await Product.findOne({
+        _id: id,
+      });
+      return res.json(product);
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  },
+  async update(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const { name } = req.body;
+      const updated = await Product.updateOne(
+        {
+          _id: id,
+        },
+        {
+        name,
+        }
+      );
+      return res.json({ message: `Product ${name} upateded successfully` });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  },
+  async delete(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const { name } = req.body;
+      await Product.findByIdAndDelete(id);
+      return res.json({ message: `Category ${name} deleted successfully` });;
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Internal server error" });
+    }
   },
 };
 

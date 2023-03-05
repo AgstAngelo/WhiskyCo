@@ -1,12 +1,14 @@
 import { Router } from "express";
 import controller from "../controllers/controllerUser";
+import isAdmin from "../middlewares/isAdmin";
+
 const routes = Router();
 
 routes.post("/user", controller.create);
-routes.get("/user", controller.findAll);
-routes.get("/user/:id", controller.findOne);
-routes.put("/user/:id", controller.update);
-routes.delete("/user/:id", controller.delete);
+routes.get("/user", isAdmin, controller.findAll);
+routes.get("/user/:id", isAdmin, controller.findOne);
+routes.put("/user/:id", isAdmin, controller.update);
+routes.delete("/user/:id", isAdmin, controller.delete);
 
 
 export default routes;

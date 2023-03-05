@@ -12,9 +12,50 @@ const controller = {
     return res.status(201).json(newPost);
   },
   async findAll(req: Request, res: Response) {
-    const users = await Category.find();
+    const category = await Category.find();
 
-    return res.json(users);
+    return res.json(category);
+  },
+  async findOne(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const category = await Category.findOne({
+        _id: id,
+      });
+      return res.json(category);
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  },
+  async update(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const { description } = req.body;
+      const updated = await Category.updateOne(
+        {
+          _id: id,
+        },
+        {
+          description,
+        }
+      );
+      return res.json({ message: `Category ${description} upateded successfully` });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  },
+  async delete(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const { description } = req.body;
+      await Category.findByIdAndDelete(id);
+      return res.json({ message: `Category ${description} deleted successfully` });;
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Internal server error" });
+    }
   },
 };
 
