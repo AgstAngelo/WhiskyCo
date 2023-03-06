@@ -33,5 +33,53 @@ const controller = {
             return res.json(products);
         });
     },
+    findOne(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.params;
+                const product = yield models_1.Product.findOne({
+                    _id: id,
+                });
+                return res.json(product);
+            }
+            catch (err) {
+                console.error(err);
+                return res.status(500).json({ message: "Internal server error" });
+            }
+        });
+    },
+    update(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.params;
+                const { name } = req.body;
+                const updated = yield models_1.Product.updateOne({
+                    _id: id,
+                }, {
+                    name,
+                });
+                return res.json({ message: `Product ${name} upateded successfully` });
+            }
+            catch (err) {
+                console.error(err);
+                return res.status(500).json({ message: "Internal server error" });
+            }
+        });
+    },
+    delete(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.params;
+                const { name } = req.body;
+                yield models_1.Product.findByIdAndDelete(id);
+                return res.json({ message: `Category ${name} deleted successfully` });
+                ;
+            }
+            catch (err) {
+                console.error(err);
+                return res.status(500).json({ message: "Internal server error" });
+            }
+        });
+    },
 };
 exports.default = controller;
