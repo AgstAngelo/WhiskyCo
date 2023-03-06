@@ -14,24 +14,31 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const models_1 = require("../models");
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const controller = {
+    createAdmin(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { name, email, cpf, address, password } = req.body;
+                const newPassword = bcrypt_1.default.hashSync(password, 8);
+                const newAdminUser = yield models_1.User.create({
+                    name,
+                    email,
+                    cpf,
+                    address,
+                    password: newPassword,
+                    isAdmin: true,
+                });
+                return res.status(201).json(newAdminUser);
+            }
+            catch (err) {
+                console.error(err);
+                return res.status(500).json({ message: "Internal server error" });
+            }
+        });
+    },
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                // Extract the JWT token from the Authorization header
-                const authHeader = req.headers.authorization;
-                if (!authHeader || !authHeader.startsWith("Bearer ")) {
-                    return res.status(401).json({ message: "Unauthorized" });
-                }
-                const token = authHeader.substring(7);
-                // Verify the token using the JWT library and the secret key
-                const decoded = jsonwebtoken_1.default.verify(token, "whiskyco");
-                // Check if the user is an admin
-                if (!decoded.isAdmin) {
-                    return res.status(401).json({ message: "Unauthorized" });
-                }
-                // Create the new user
                 const { name, email, cpf, address, password, isAdmin } = req.body;
                 const newPassword = bcrypt_1.default.hashSync(password, 8);
                 const newUser = yield models_1.User.create({

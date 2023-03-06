@@ -6,7 +6,7 @@ import authValidation from "../middlewares/auth"
 const routes = Router();
 
 routes.post("/product", isAdmin, controller.create);
-routes.get("/product", authValidation, controller.findAll);
+routes.get("/product", controller.findAll);
 routes.get("/product/:id", controller.findOne);
 routes.put("/product/:id", isAdmin, controller.update);
 routes.delete("/product/:id", isAdmin, controller.delete);

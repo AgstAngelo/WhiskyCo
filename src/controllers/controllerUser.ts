@@ -1,26 +1,33 @@
 import { Request, Response } from "express";
 import { User } from "../models";
 import bcrypt from "bcrypt";
-import jwt from 'jsonwebtoken';
 
 const controller = {
+  async createAdmin(req: Request, res: Response) {
+    try {
+      const { name, email, cpf, address, password } = req.body;
+      const newPassword = bcrypt.hashSync(password, 8);
+
+      const newAdminUser = await User.create({
+        name,
+        email,
+        cpf,
+        address,
+        password: newPassword,
+        isAdmin: true,
+      });
+
+      return res.status(201).json(newAdminUser);
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  },
   async create(req: Request, res: Response) {
     try {
-      // Extract the JWT token from the Authorization header
-      const authHeader = req.headers.authorization;
-      if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        return res.status(401).json({ message: "Unauthorized" });
-      }
-      const token = authHeader.substring(7);
-      // Verify the token using the JWT library and the secret key
-      const decoded: any = jwt.verify(token, "whiskyco");
-      // Check if the user is an admin
-      if (!decoded.isAdmin) {
-        return res.status(401).json({ message: "Unauthorized" });
-      }
-      // Create the new user
       const { name, email, cpf, address, password, isAdmin } = req.body;
       const newPassword = bcrypt.hashSync(password, 8);
+
       const newUser = await User.create({
         name,
         email,
@@ -29,6 +36,7 @@ const controller = {
         password: newPassword,
         isAdmin,
       });
+
       return res.status(201).json(newUser);
     } catch (err) {
       console.error(err);

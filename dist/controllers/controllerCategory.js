@@ -13,17 +13,33 @@ const models_1 = require("../models");
 const controller = {
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { description } = req.body;
-            const newPost = yield models_1.Category.create({
-                description,
-            });
-            return res.status(201).json(newPost);
+            try {
+                const { description } = req.body;
+                const existingCategory = yield models_1.Category.findOne({ description });
+                if (existingCategory) {
+                    return res.status(400).json({ message: "Category already exists" });
+                }
+                const newCategory = yield models_1.Category.create({
+                    description,
+                });
+                return res.status(201).json(newCategory);
+            }
+            catch (err) {
+                console.error(err);
+                return res.status(500).json({ message: "Internal server error" });
+            }
         });
     },
     findAll(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const category = yield models_1.Category.find();
-            return res.json(category);
+            try {
+                const category = yield models_1.Category.find();
+                return res.json(category);
+            }
+            catch (err) {
+                console.error(err);
+                return res.status(500).json({ message: "Internal server error" });
+            }
         });
     },
     findOne(req, res) {
