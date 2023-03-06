@@ -8,16 +8,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
-class Conection {
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
+class Connection {
     constructor(db_conection_string) {
         this.db_conection_string = db_conection_string;
     }
     createConection() {
         return __awaiter(this, void 0, void 0, function* () {
+            const mongoUrl = process.env.MONGO_URL;
+            if (!mongoUrl) {
+                console.error("MONGO_URL not found in .env file");
+                return;
+            }
             try {
-                yield (0, mongoose_1.connect)(this.db_conection_string);
+                yield (0, mongoose_1.connect)(mongoUrl);
                 console.log("Banco de dados conectado");
             }
             catch (error) {
@@ -26,4 +36,4 @@ class Conection {
         });
     }
 }
-exports.default = Conection;
+exports.default = Connection;

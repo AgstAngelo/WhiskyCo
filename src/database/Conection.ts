@@ -1,5 +1,9 @@
 import { connect } from "mongoose";
-export default class Conection {
+import dotenv from "dotenv";
+
+dotenv.config();
+
+export default class Connection {
   private db_conection_string: string;
 
   constructor(db_conection_string: string) {
@@ -7,8 +11,15 @@ export default class Conection {
   }
 
   async createConection() {
+    const mongoUrl = process.env.MONGO_URL;
+
+    if (!mongoUrl) {
+      console.error("MONGO_URL not found in .env file");
+      return;
+    }
+
     try {
-      await connect(this.db_conection_string);
+      await connect(mongoUrl);
       console.log("Banco de dados conectado");
     } catch (error) {
       console.error(error);
