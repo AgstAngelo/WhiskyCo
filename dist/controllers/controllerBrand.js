@@ -10,44 +10,51 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const models_1 = require("../models");
+const models_2 = require("../models");
 const controller = {
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { name, picture, price, description, category } = req.body;
-            const newProduct = yield models_1.Product.create({
-                name,
-                picture,
-                price,
-                description,
-                category,
-            });
-            return res.status(201).json(newProduct);
+            try {
+                const { description } = req.body;
+                const existingBrand = yield models_1.Brand.findOne({ description });
+                if (existingBrand) {
+                    return res.status(400).json({ message: "Brand already exists" });
+                }
+                const newBrand = yield models_1.Brand.create({
+                    description,
+                });
+                return res.status(201).json(newBrand);
+            }
+            catch (err) {
+                console.error(err);
+                return res.status(500).json({ message: "Internal server error" });
+            }
         });
     },
     findAll(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const products = yield models_1.Product.find().populate({
-                    path: "category",
-                    select: "description",
-                });
-                return res.json(products);
+                const brand = yield models_1.Brand.find();
+                return res.json(brand);
             }
-            catch (error) {
-                console.error(error);
+            catch (err) {
+                console.error(err);
                 return res.status(500).json({ message: "Internal server error" });
             }
         });
     },
-    find(req, res) {
+    findOne(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { name } = req.params;
-                const product = yield models_1.Product.find({ name: { $regex: `.*${name}.*`, $options: "i" } });
-                if (!product) {
-                    return res.status(404).json({ message: "Product not found" });
+                const { id } = req.params;
+                const brand = yield models_1.Brand.findById(id).lean();
+                if (!brand) {
+                    return res.status(404).json({ message: "Brand not found" });
                 }
-                return res.json(product);
+                const products = yield models_2.Product.find({
+                    brand: brand._id,
+                }).lean();
+                return res.json({ brand, products });
             }
             catch (err) {
                 console.error(err);
@@ -59,16 +66,13 @@ const controller = {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { id } = req.params;
-                const { name, picture, price, description } = req.body;
-                yield models_1.Product.updateOne({
+                const { description } = req.body;
+                yield models_1.Brand.updateOne({
                     _id: id,
                 }, {
-                    name,
-                    picture,
-                    price,
                     description,
                 });
-                return res.json({ message: `Product ${name} updated successfully` });
+                return res.json({ message: `Brand ${description} upateded successfully` });
             }
             catch (err) {
                 console.error(err);
@@ -80,16 +84,15 @@ const controller = {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { id } = req.params;
-                const { name } = req.body;
-                yield models_1.Product.findByIdAndDelete(id);
-                return res.json({ message: `Product ${name} deleted successfully` });
-                ;
+                const { description } = req.body;
+                yield models_1.Brand.findByIdAndDelete(id);
+                return res.json({ message: `Brand ${description} deleted successfully` });
             }
             catch (err) {
                 console.error(err);
                 return res.status(500).json({ message: "Internal server error" });
             }
         });
-    },
+    }
 };
 exports.default = controller;

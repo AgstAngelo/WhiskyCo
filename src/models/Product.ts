@@ -6,6 +6,7 @@ interface IProduct {
     price: string;
     description: string;
     category: Types.ObjectId;
+    brand: Types.ObjectId;
 }
 
 const productSchema = new Schema<IProduct>(
@@ -15,6 +16,7 @@ const productSchema = new Schema<IProduct>(
     price: { type: String, required: true },
     description: { type: String, required: true },
     category: { type: Schema.Types.ObjectId, required: true, ref: "Category" },
+    brand: { type: Schema.Types.ObjectId, required: true, ref: "Brand" },
   },
   {
     timestamps: true,
