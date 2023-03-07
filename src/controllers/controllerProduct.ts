@@ -26,10 +26,9 @@ const controller = {
   },
   async findOne(req: Request, res: Response) {
     try {
-      const { id } = req.params;
-      const product = await Product.findOne({
-        _id: id,
-      });
+      const { name } = req.params;
+      const product = await Product.findOne({ name: { $regex: `.*${name}.*`, $options: "i" } });
+      
       if (!product) {
         return res.status(404).json({ message: "Product not found" });
     }

@@ -7,7 +7,7 @@ const routes = Router();
 
 routes.post("/product", isAdmin, controller.create);
 routes.get("/product", controller.findAll);
-routes.get("/product/:id", controller.findOne);
+routes.get("/product/:name", controller.findOne);
 routes.put("/product/:id", isAdmin, controller.update);
 routes.delete("/product/:id", isAdmin, controller.delete);
 

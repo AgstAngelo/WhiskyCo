@@ -36,10 +36,8 @@ const controller = {
     findOne(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { id } = req.params;
-                const product = yield models_1.Product.findOne({
-                    _id: id,
-                });
+                const { name } = req.params;
+                const product = yield models_1.Product.findOne({ name: { $regex: `.*${name}.*`, $options: "i" } });
                 if (!product) {
                     return res.status(404).json({ message: "Product not found" });
                 }

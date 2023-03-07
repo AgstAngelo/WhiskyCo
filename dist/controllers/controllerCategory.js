@@ -34,10 +34,7 @@ const controller = {
     findAll(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const category = yield models_1.Category.find().populate({
-                    path: "categoryValues",
-                    select: 'name picture price description'
-                });
+                const category = yield models_1.Category.find();
                 return res.json(category);
             }
             catch (err) {

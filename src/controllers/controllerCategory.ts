@@ -25,10 +25,7 @@ const controller = {
   },
   async findAll(req: Request, res: Response) {
     try {
-      const category = await Category.find().populate({
-        path: "categoryValues",
-        select: 'name picture price description'
-      });
+      const category = await Category.find();
 
       return res.json(category);
     } catch (err) {
