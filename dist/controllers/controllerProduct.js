@@ -13,13 +13,14 @@ const models_1 = require("../models");
 const controller = {
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { name, picture, price, description, category } = req.body;
+            const { name, picture, price, description, category, brand } = req.body;
             const newProduct = yield models_1.Product.create({
                 name,
                 picture,
                 price,
                 description,
                 category,
+                brand,
             });
             return res.status(201).json(newProduct);
         });
@@ -29,6 +30,10 @@ const controller = {
             try {
                 const products = yield models_1.Product.find().populate({
                     path: "category",
+                    select: "description",
+                })
+                    .populate({
+                    path: "brand",
                     select: "description",
                 });
                 return res.json(products);

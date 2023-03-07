@@ -22,6 +22,10 @@ const controller = {
     const products = await Product.find().populate({
       path: "category",
       select: "description",
+    })
+    .populate({
+      path: "brand",
+      select: "description",
     });
 
     return res.json(products);
