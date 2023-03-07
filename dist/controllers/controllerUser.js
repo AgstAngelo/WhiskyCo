@@ -76,6 +76,9 @@ const controller = {
                 const user = yield models_1.User.findOne({
                     _id: id,
                 });
+                if (!user) {
+                    return res.status(404).json({ message: "User not found" });
+                }
                 return res.json(user);
             }
             catch (err) {
@@ -107,8 +110,13 @@ const controller = {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { id } = req.params;
+                const user = yield models_1.User.findById(id);
+                if (!user) {
+                    return res.status(404).json({ message: "User not found" });
+                }
+                const { name } = user;
                 yield models_1.User.findByIdAndDelete(id);
-                return res.sendStatus(204);
+                return res.json({ message: `User ${name} deleted successfully` });
             }
             catch (err) {
                 console.error(err);

@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const models_1 = require("../models");
+const models_2 = require("../models");
 const controller = {
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -33,7 +34,10 @@ const controller = {
     findAll(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const category = yield models_1.Category.find();
+                const category = yield models_1.Category.find().populate({
+                    path: "categoryValues",
+                    select: 'name picture price description'
+                });
                 return res.json(category);
             }
             catch (err) {
@@ -46,10 +50,14 @@ const controller = {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { id } = req.params;
-                const category = yield models_1.Category.findOne({
-                    _id: id,
-                });
-                return res.json(category);
+                const category = yield models_1.Category.findById(id).lean();
+                if (!category) {
+                    return res.status(404).json({ message: "Category not found" });
+                }
+                const products = yield models_2.Product.find({
+                    category: category._id,
+                }).lean();
+                return res.json({ category, products });
             }
             catch (err) {
                 console.error(err);
@@ -62,7 +70,7 @@ const controller = {
             try {
                 const { id } = req.params;
                 const { description } = req.body;
-                const updated = yield models_1.Category.updateOne({
+                yield models_1.Category.updateOne({
                     _id: id,
                 }, {
                     description,
@@ -82,13 +90,12 @@ const controller = {
                 const { description } = req.body;
                 yield models_1.Category.findByIdAndDelete(id);
                 return res.json({ message: `Category ${description} deleted successfully` });
-                ;
             }
             catch (err) {
                 console.error(err);
                 return res.status(500).json({ message: "Internal server error" });
             }
         });
-    },
+    }
 };
 exports.default = controller;

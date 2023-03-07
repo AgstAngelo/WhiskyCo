@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { Category } from "../models";
+import { Product } from "../models";
 
 const controller = {
   async create(req: Request, res: Response) {
@@ -24,7 +25,10 @@ const controller = {
   },
   async findAll(req: Request, res: Response) {
     try {
-      const category = await Category.find();
+      const category = await Category.find().populate({
+        path: "categoryValues",
+        select: 'name picture price description'
+      });
 
       return res.json(category);
     } catch (err) {
@@ -35,10 +39,18 @@ const controller = {
   async findOne(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const category = await Category.findOne({
-        _id: id,
-      });
-      return res.json(category);
+  
+      const category = await Category.findById(id).lean();
+  
+      if (!category) {
+        return res.status(404).json({ message: "Category not found" });
+      }
+  
+      const products = await Product.find({
+        category: category._id,
+      }).lean();
+  
+      return res.json({ category, products });
     } catch (err) {
       console.error(err);
       return res.status(500).json({ message: "Internal server error" });
@@ -48,7 +60,7 @@ const controller = {
     try {
       const { id } = req.params;
       const { description } = req.body;
-      const updated = await Category.updateOne(
+      await Category.updateOne(
         {
           _id: id,
         },
@@ -64,15 +76,16 @@ const controller = {
   },
   async delete(req: Request, res: Response) {
     try {
-      const { id } = req.params;
-      const { description } = req.body;
-      await Category.findByIdAndDelete(id);
-      return res.json({ message: `Category ${description} deleted successfully` });;
+        const { id } = req.params;
+              
+        const { description } = req.body;
+        await Category.findByIdAndDelete(id);
+        return res.json({ message: `Category ${description} deleted successfully` });
     } catch (err) {
-      console.error(err);
-      return res.status(500).json({ message: "Internal server error" });
+        console.error(err);
+        return res.status(500).json({ message: "Internal server error" });
     }
-  },
+}
 };
 
 export default controller;

@@ -58,6 +58,9 @@ const controller = {
       const user = await User.findOne({
         _id: id,
       });
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+    }
       return res.json(user);
     } catch (err) {
       console.error(err);
@@ -86,8 +89,13 @@ const controller = {
   async delete(req: Request, res: Response) {
     try {
       const { id } = req.params;
+      const user = await User.findById(id);
+      if(!user){
+        return res.status(404).json({message: "User not found"});
+      }
+      const { name } = user;
       await User.findByIdAndDelete(id);
-      return res.sendStatus(204);
+      return res.json({ message: `User ${name} deleted successfully`});
     } catch (err) {
       console.error(err);
       return res.status(500).json({ message: "Internal server error" });

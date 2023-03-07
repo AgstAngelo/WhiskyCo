@@ -40,6 +40,9 @@ const controller = {
                 const product = yield models_1.Product.findOne({
                     _id: id,
                 });
+                if (!product) {
+                    return res.status(404).json({ message: "Product not found" });
+                }
                 return res.json(product);
             }
             catch (err) {
@@ -52,13 +55,16 @@ const controller = {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { id } = req.params;
-                const { name } = req.body;
-                const updated = yield models_1.Product.updateOne({
+                const { name, picture, price, description } = req.body;
+                yield models_1.Product.updateOne({
                     _id: id,
                 }, {
                     name,
+                    picture,
+                    price,
+                    description,
                 });
-                return res.json({ message: `Product ${name} upateded successfully` });
+                return res.json({ message: `Product ${name} updated successfully` });
             }
             catch (err) {
                 console.error(err);
@@ -72,7 +78,7 @@ const controller = {
                 const { id } = req.params;
                 const { name } = req.body;
                 yield models_1.Product.findByIdAndDelete(id);
-                return res.json({ message: `Category ${name} deleted successfully` });
+                return res.json({ message: `Product ${name} deleted successfully` });
                 ;
             }
             catch (err) {

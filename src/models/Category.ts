@@ -1,14 +1,16 @@
 
-import { Schema, model } from "mongoose";
+import { Schema, model, Types } from "mongoose";
 
 interface ICategory {
   description: string;
+  
 }
 
 const categorySchema = new Schema<ICategory>(
   {
     description: { type: String, required: true },
     
+
   },
   {
     timestamps: true,
