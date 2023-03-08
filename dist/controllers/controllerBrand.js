@@ -15,13 +15,13 @@ const controller = {
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { description } = req.body;
-                const existingBrand = yield models_1.Brand.findOne({ description });
+                const { name } = req.body;
+                const existingBrand = yield models_1.Brand.findOne({ name });
                 if (existingBrand) {
                     return res.status(400).json({ message: "Brand already exists" });
                 }
                 const newBrand = yield models_1.Brand.create({
-                    description,
+                    name,
                 });
                 return res.status(201).json(newBrand);
             }
@@ -66,13 +66,13 @@ const controller = {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { id } = req.params;
-                const { description } = req.body;
+                const { name } = req.body;
                 yield models_1.Brand.updateOne({
                     _id: id,
                 }, {
-                    description,
+                    name,
                 });
-                return res.json({ message: `Brand ${description} upateded successfully` });
+                return res.json({ message: `Brand ${name} upateded successfully` });
             }
             catch (err) {
                 console.error(err);
@@ -84,9 +84,9 @@ const controller = {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { id } = req.params;
-                const { description } = req.body;
+                const { name } = req.body;
                 yield models_1.Brand.findByIdAndDelete(id);
-                return res.json({ message: `Brand ${description} deleted successfully` });
+                return res.json({ message: `Brand ${name} deleted successfully` });
             }
             catch (err) {
                 console.error(err);

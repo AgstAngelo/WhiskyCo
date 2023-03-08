@@ -5,16 +5,16 @@ import { Product } from "../models";
 const controller = {
   async create(req: Request, res: Response) {
     try {
-      const { description } = req.body;
+      const { name } = req.body;
   
-      const existingBrand = await Brand.findOne({ description });
+      const existingBrand = await Brand.findOne({ name });
   
       if (existingBrand) {
         return res.status(400).json({ message: "Brand already exists" });
       }
   
       const newBrand = await Brand.create({
-        description,
+        name,
       });
   
       return res.status(201).json(newBrand);
@@ -56,16 +56,16 @@ const controller = {
   async update(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const { description } = req.body;
+      const { name } = req.body;
       await Brand.updateOne(
         {
           _id: id,
         },
         {
-          description,
+          name,
         }
       );
-      return res.json({ message: `Brand ${description} upateded successfully` });
+      return res.json({ message: `Brand ${name} upateded successfully` });
     } catch (err) {
       console.error(err);
       return res.status(500).json({ message: "Internal server error" });
@@ -75,9 +75,9 @@ const controller = {
     try {
         const { id } = req.params;
               
-        const { description } = req.body;
+        const { name } = req.body;
         await Brand.findByIdAndDelete(id);
-        return res.json({ message: `Brand ${description} deleted successfully` });
+        return res.json({ message: `Brand ${name} deleted successfully` });
     } catch (err) {
         console.error(err);
         return res.status(500).json({ message: "Internal server error" });

@@ -15,13 +15,13 @@ const controller = {
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { description } = req.body;
-                const existingCategory = yield models_1.Category.findOne({ description });
+                const { name } = req.body;
+                const existingCategory = yield models_1.Category.findOne({ name });
                 if (existingCategory) {
                     return res.status(400).json({ message: "Category already exists" });
                 }
                 const newCategory = yield models_1.Category.create({
-                    description,
+                    name,
                 });
                 return res.status(201).json(newCategory);
             }
@@ -66,13 +66,13 @@ const controller = {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { id } = req.params;
-                const { description } = req.body;
+                const { name } = req.body;
                 yield models_1.Category.updateOne({
                     _id: id,
                 }, {
-                    description,
+                    name,
                 });
-                return res.json({ message: `Category ${description} upateded successfully` });
+                return res.json({ message: `Category ${name} upateded successfully` });
             }
             catch (err) {
                 console.error(err);
@@ -84,9 +84,9 @@ const controller = {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { id } = req.params;
-                const { description } = req.body;
+                const { name } = req.body;
                 yield models_1.Category.findByIdAndDelete(id);
-                return res.json({ message: `Category ${description} deleted successfully` });
+                return res.json({ message: `Category ${name} deleted successfully` });
             }
             catch (err) {
                 console.error(err);

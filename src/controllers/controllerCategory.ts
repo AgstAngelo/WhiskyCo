@@ -5,16 +5,16 @@ import { Product } from "../models";
 const controller = {
   async create(req: Request, res: Response) {
     try {
-      const { description } = req.body;
+      const { name } = req.body;
   
-      const existingCategory = await Category.findOne({ description });
+      const existingCategory = await Category.findOne({ name });
   
       if (existingCategory) {
         return res.status(400).json({ message: "Category already exists" });
       }
   
       const newCategory = await Category.create({
-        description,
+        name,
       });
   
       return res.status(201).json(newCategory);
@@ -56,16 +56,16 @@ const controller = {
   async update(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const { description } = req.body;
+      const { name } = req.body;
       await Category.updateOne(
         {
           _id: id,
         },
         {
-          description,
+          name,
         }
       );
-      return res.json({ message: `Category ${description} upateded successfully` });
+      return res.json({ message: `Category ${name} upateded successfully` });
     } catch (err) {
       console.error(err);
       return res.status(500).json({ message: "Internal server error" });
@@ -75,9 +75,9 @@ const controller = {
     try {
         const { id } = req.params;
               
-        const { description } = req.body;
+        const { name } = req.body;
         await Category.findByIdAndDelete(id);
-        return res.json({ message: `Category ${description} deleted successfully` });
+        return res.json({ message: `Category ${name} deleted successfully` });
     } catch (err) {
         console.error(err);
         return res.status(500).json({ message: "Internal server error" });

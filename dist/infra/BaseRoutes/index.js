@@ -9,10 +9,12 @@ const routesCategory_1 = __importDefault(require("../../routes/routesCategory"))
 const routesProduct_1 = __importDefault(require("../../routes/routesProduct"));
 const routesAuth_1 = __importDefault(require("../../routes/routesAuth"));
 const routesBrand_1 = __importDefault(require("../../routes/routesBrand"));
+const routesOrder_1 = __importDefault(require("../../routes/routesOrder"));
 const routes = (0, express_1.Router)();
 routes.use(routesUser_1.default);
 routes.use(routesCategory_1.default);
 routes.use(routesProduct_1.default);
 routes.use(routesAuth_1.default);
 routes.use(routesBrand_1.default);
+routes.use(routesOrder_1.default);
 exports.default = routes;

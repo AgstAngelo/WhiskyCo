@@ -2,13 +2,13 @@
 import { Schema, model, Types } from "mongoose";
 
 interface ICategory {
-  description: string;
+  name: string;
   
 }
 
 const categorySchema = new Schema<ICategory>(
   {
-    description: { type: String, required: true },
+    name: { type: String, required: true },
     
 
   },

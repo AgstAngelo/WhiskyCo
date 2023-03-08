@@ -1,14 +1,14 @@
 
-import { Schema, model, Types } from "mongoose";
+import { Schema, model } from "mongoose";
 
 interface IBrand {
-  description: string;
+  name: string;
   
 }
 
 const brandSchema = new Schema<IBrand>(
   {
-    description: { type: String, required: true },
+    name: { type: String, required: true },
     
 
   },
