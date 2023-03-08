@@ -11,6 +11,12 @@ const routesAuth_1 = __importDefault(require("../../routes/routesAuth"));
 const routesBrand_1 = __importDefault(require("../../routes/routesBrand"));
 const routesOrder_1 = __importDefault(require("../../routes/routesOrder"));
 const routes = (0, express_1.Router)();
+routes.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+});
 routes.use(routesUser_1.default);
 routes.use(routesCategory_1.default);
 routes.use(routesProduct_1.default);

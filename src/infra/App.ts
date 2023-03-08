@@ -19,6 +19,7 @@ export default class App {
   private instance: Application;
   private defaultPort: number = 4000;
 
+  
   constructor() {
     this.instance = Express();
   }
