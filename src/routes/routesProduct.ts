@@ -1,7 +1,6 @@
 import { Router } from "express";
 import controller from "../controllers/controllerProduct";
 import isAdmin from "../middlewares/isAdmin";
-import authValidation from "../middlewares/auth"
 
 const routes = Router();
 

@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { Product } from "../models";
 
-
 const controller = {
   async create(req: Request, res: Response) {
     const { name, picture, price, description, category, brand} = req.body;
