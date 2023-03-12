@@ -4,7 +4,7 @@ import isAdmin from "../middlewares/isAdmin";
 
 const routes = Router();
 
-routes.post("/product", isAdmin, controller.create);
+routes.post("/product", controller.create);
 routes.get("/product", controller.findAll);
 routes.get("/product/:name", controller.find);
 routes.put("/product/:id", isAdmin, controller.update);

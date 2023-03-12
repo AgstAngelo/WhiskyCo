@@ -16,6 +16,7 @@ class App {
         const selectedPort = options.port ? options.port : this.defaultPort;
         this.instance.use(express_1.default.json());
         this.instance.use(BaseRoutes_1.default);
+        //this.instance.use(multer({ storage: storage }).single("picture"));
         if (options.isTest)
             return;
         this.instance.listen(selectedPort, () => console.log(`Servidor rodando na porta: ${selectedPort}`));

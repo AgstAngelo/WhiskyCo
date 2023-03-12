@@ -2,10 +2,7 @@ import { Schema, model, Types } from "mongoose";
 
 interface IProduct {
     name: string;
-    picture: {
-        data: Buffer,
-        contentType: String
-    };
+    picture: string;
     price: string;
     description: string;
     category: Types.ObjectId;
@@ -15,10 +12,7 @@ interface IProduct {
 const productSchema = new Schema<IProduct>(
   {
     name: { type: String, required: true },
-    picture: {
-        data: { type: Buffer, required: true },
-        contentType: { type: String, required: true }
-    },
+    picture: { type: String, required: true },
     price: { type: String, required: true },
     description: { type: String, required: true },
     category: { type: Schema.Types.ObjectId, required: true, ref: "Category" },

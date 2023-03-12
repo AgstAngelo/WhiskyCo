@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Product } from "../models";
 
+
 const controller = {
   async create(req: Request, res: Response) {
     const { name, picture, price, description, category, brand} = req.body;
@@ -20,11 +21,11 @@ const controller = {
     try {
     const products = await Product.find().populate({
       path: "category",
-      select: "description",
+      select: "name",
     })
     .populate({
       path: "brand",
-      select: "description",
+      select: "name",
     });
 
     return res.json(products);
@@ -51,7 +52,7 @@ const controller = {
   async update(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const { name, picture, price, description } = req.body;
+      const { name, picture, price, description, category, brand } = req.body;
       
       await Product.updateOne(
         {
@@ -62,6 +63,8 @@ const controller = {
         picture,
         price,
         description,
+        category,
+        brand
         }
       );
       

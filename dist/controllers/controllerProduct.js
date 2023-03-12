@@ -30,11 +30,11 @@ const controller = {
             try {
                 const products = yield models_1.Product.find().populate({
                     path: "category",
-                    select: "description",
+                    select: "name",
                 })
                     .populate({
                     path: "brand",
-                    select: "description",
+                    select: "name",
                 });
                 return res.json(products);
             }
