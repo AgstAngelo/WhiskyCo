@@ -30,7 +30,7 @@ const controller = {
       secret.key
     );
 
-    return res.json(token);
+    return res.json({user, token});
   },
 };
 

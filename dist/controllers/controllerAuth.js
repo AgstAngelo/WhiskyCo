@@ -35,7 +35,7 @@ const controller = {
                 name: user.name,
                 isAdmin: user.isAdmin
             }, secret_1.secret.key);
-            return res.json(token);
+            return res.json({ user, token });
         });
     },
 };

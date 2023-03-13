@@ -64,7 +64,7 @@ const controller = {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { id } = req.params;
-                const { name, picture, price, description } = req.body;
+                const { name, picture, price, description, category, brand } = req.body;
                 yield models_1.Product.updateOne({
                     _id: id,
                 }, {
@@ -72,6 +72,8 @@ const controller = {
                     picture,
                     price,
                     description,
+                    category,
+                    brand
                 });
                 return res.json({ message: `Product ${name} updated successfully` });
             }
