@@ -16,6 +16,7 @@ const models_1 = require("../models");
 const secret_1 = require("../configs/secret");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const messages_1 = __importDefault(require("../constants/messages"));
 const controller = {
     login(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -24,10 +25,10 @@ const controller = {
                 email
             });
             if (!user) {
-                return res.status(400).json("Email not found!");
+                return res.status(400).json(messages_1.default.ERROR.EMAIL_ERROR);
             }
             if (!bcrypt_1.default.compareSync(password, user.password)) {
-                return res.status(401).json("Wrong Password!");
+                return res.status(401).json(messages_1.default.ERROR.PASSWORD_ERROR);
             }
             const token = jsonwebtoken_1.default.sign({
                 id: user.id,

@@ -20,7 +20,7 @@ const userSchema = new Schema<IUser>(
     isAdmin: { type: Boolean, default: false },
   },
   {
-    timestamps: true,
+    timestamps: true
   }
 );
 

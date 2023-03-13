@@ -21,7 +21,7 @@ const controller = {
   async findAll(req: Request, res: Response) {
     const orders = await Order.find().populate({
       path: "category",
-      select: "description",
+      select: "name",
     }); // não sei qual o parametro correto;
 
     return res.json(orders);

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { User } from "../models";
 import bcrypt from "bcrypt";
+import MESSAGE from "../constants/messages";
 
 const controller = {
   async createAdmin(req: Request, res: Response) {
@@ -20,7 +21,7 @@ const controller = {
       return res.status(201).json(newAdminUser);
     } catch (err) {
       console.error(err);
-      return res.status(500).json({ message: "Internal server error" });
+      return res.status(500).json(MESSAGE.ERROR.SERVER_ERROR);
     }
   },
   async create(req: Request, res: Response) {
@@ -40,7 +41,7 @@ const controller = {
       return res.status(201).json(newUser);
     } catch (err) {
       console.error(err);
-      return res.status(500).json({ message: "Internal server error" });
+      return res.status(500).json(MESSAGE.ERROR.SERVER_ERROR);
     }
   },
   async findAll(req: Request, res: Response) {
@@ -49,7 +50,7 @@ const controller = {
       return res.json(users);
     } catch (err) {
       console.error(err);
-      return res.status(500).json({ message: "Internal server error" });
+      return res.status(500).json(MESSAGE.ERROR.SERVER_ERROR);
     }
   },
   async findOne(req: Request, res: Response) {
@@ -59,12 +60,12 @@ const controller = {
         _id: id,
       });
       if (!user) {
-        return res.status(404).json({ message: "User not found" });
+        return res.status(404).json(MESSAGE.ERROR.SERVER_ERROR);
     }
       return res.json(user);
     } catch (err) {
       console.error(err);
-      return res.status(500).json({ message: "Internal server error" });
+      return res.status(500).json(MESSAGE.ERROR.SERVER_ERROR);
     }
   },
   async update(req: Request, res: Response) {
@@ -83,7 +84,7 @@ const controller = {
       return res.sendStatus(204);
     } catch (err) {
       console.error(err);
-      return res.status(500).json({ message: "Internal server error" });
+      return res.status(500).json(MESSAGE.ERROR.SERVER_ERROR);
     }
   },
   async delete(req: Request, res: Response) {
@@ -98,7 +99,7 @@ const controller = {
       return res.json({ message: `User ${name} deleted successfully`});
     } catch (err) {
       console.error(err);
-      return res.status(500).json({ message: "Internal server error" });
+      return res.status(500).json(MESSAGE.ERROR.SERVER_ERROR);
     }
   },
 };

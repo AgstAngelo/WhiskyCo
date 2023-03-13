@@ -8,9 +8,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const models_1 = require("../models");
 const models_2 = require("../models");
+const messages_1 = __importDefault(require("../constants/messages"));
 const controller = {
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -27,7 +31,7 @@ const controller = {
             }
             catch (err) {
                 console.error(err);
-                return res.status(500).json({ message: "Internal server error" });
+                return res.status(500).json(messages_1.default.ERROR.SERVER_ERROR);
             }
         });
     },
@@ -39,7 +43,7 @@ const controller = {
             }
             catch (err) {
                 console.error(err);
-                return res.status(500).json({ message: "Internal server error" });
+                return res.status(500).json(messages_1.default.ERROR.SERVER_ERROR);
             }
         });
     },
@@ -58,7 +62,7 @@ const controller = {
             }
             catch (err) {
                 console.error(err);
-                return res.status(500).json({ message: "Internal server error" });
+                return res.status(500).json(messages_1.default.ERROR.SERVER_ERROR);
             }
         });
     },
@@ -76,7 +80,7 @@ const controller = {
             }
             catch (err) {
                 console.error(err);
-                return res.status(500).json({ message: "Internal server error" });
+                return res.status(500).json(messages_1.default.ERROR.SERVER_ERROR);
             }
         });
     },
@@ -90,7 +94,7 @@ const controller = {
             }
             catch (err) {
                 console.error(err);
-                return res.status(500).json({ message: "Internal server error" });
+                return res.status(500).json(messages_1.default.ERROR.SERVER_ERROR);
             }
         });
     }

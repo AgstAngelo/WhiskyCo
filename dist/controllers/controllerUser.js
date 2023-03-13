@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const models_1 = require("../models");
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const messages_1 = __importDefault(require("../constants/messages"));
 const controller = {
     createAdmin(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -32,7 +33,7 @@ const controller = {
             }
             catch (err) {
                 console.error(err);
-                return res.status(500).json({ message: "Internal server error" });
+                return res.status(500).json(messages_1.default.ERROR.SERVER_ERROR);
             }
         });
     },
@@ -53,7 +54,7 @@ const controller = {
             }
             catch (err) {
                 console.error(err);
-                return res.status(500).json({ message: "Internal server error" });
+                return res.status(500).json(messages_1.default.ERROR.SERVER_ERROR);
             }
         });
     },
@@ -65,7 +66,7 @@ const controller = {
             }
             catch (err) {
                 console.error(err);
-                return res.status(500).json({ message: "Internal server error" });
+                return res.status(500).json(messages_1.default.ERROR.SERVER_ERROR);
             }
         });
     },
@@ -77,13 +78,13 @@ const controller = {
                     _id: id,
                 });
                 if (!user) {
-                    return res.status(404).json({ message: "User not found" });
+                    return res.status(404).json(messages_1.default.ERROR.SERVER_ERROR);
                 }
                 return res.json(user);
             }
             catch (err) {
                 console.error(err);
-                return res.status(500).json({ message: "Internal server error" });
+                return res.status(500).json(messages_1.default.ERROR.SERVER_ERROR);
             }
         });
     },
@@ -102,7 +103,7 @@ const controller = {
             }
             catch (err) {
                 console.error(err);
-                return res.status(500).json({ message: "Internal server error" });
+                return res.status(500).json(messages_1.default.ERROR.SERVER_ERROR);
             }
         });
     },
@@ -120,7 +121,7 @@ const controller = {
             }
             catch (err) {
                 console.error(err);
-                return res.status(500).json({ message: "Internal server error" });
+                return res.status(500).json(messages_1.default.ERROR.SERVER_ERROR);
             }
         });
     },

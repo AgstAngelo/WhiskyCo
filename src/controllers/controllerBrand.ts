@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Brand } from "../models";
 import { Product } from "../models";
+import MESSAGE from "../constants/messages";
 
 const controller = {
   async create(req: Request, res: Response) {
@@ -20,7 +21,7 @@ const controller = {
       return res.status(201).json(newBrand);
     } catch (err) {
       console.error(err);
-      return res.status(500).json({ message: "Internal server error" });
+      return res.status(500).json(MESSAGE.ERROR.SERVER_ERROR);
     }
   },
   async findAll(req: Request, res: Response) {
@@ -30,7 +31,7 @@ const controller = {
       return res.json(brand);
     } catch (err) {
       console.error(err);
-      return res.status(500).json({ message: "Internal server error" });
+      return res.status(500).json(MESSAGE.ERROR.SERVER_ERROR);
     }
   },
   async findOne(req: Request, res: Response) {
@@ -50,7 +51,7 @@ const controller = {
       return res.json({ brand, products });
     } catch (err) {
       console.error(err);
-      return res.status(500).json({ message: "Internal server error" });
+      return res.status(500).json(MESSAGE.ERROR.SERVER_ERROR);
     }
   },
   async update(req: Request, res: Response) {
@@ -68,7 +69,7 @@ const controller = {
       return res.json({ message: `Brand ${name} upateded successfully` });
     } catch (err) {
       console.error(err);
-      return res.status(500).json({ message: "Internal server error" });
+      return res.status(500).json(MESSAGE.ERROR.SERVER_ERROR);
     }
   },
   async delete(req: Request, res: Response) {
@@ -80,7 +81,7 @@ const controller = {
         return res.json({ message: `Brand ${name} deleted successfully` });
     } catch (err) {
         console.error(err);
-        return res.status(500).json({ message: "Internal server error" });
+        return res.status(500).json(MESSAGE.ERROR.SERVER_ERROR);
     }
 }
 };

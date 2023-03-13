@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { Product } from "../models";
+import MESSAGE from "../constants/messages";
 
 
 const controller = {
@@ -31,7 +32,7 @@ const controller = {
     return res.json(products);
     } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json(MESSAGE.ERROR.SERVER_ERROR);
     }
     },
 
@@ -46,7 +47,7 @@ const controller = {
       return res.json(product);
     } catch (err) {
       console.error(err);
-      return res.status(500).json({ message: "Internal server error" });
+      return res.status(500).json(MESSAGE.ERROR.SERVER_ERROR);
     }
   },
   async update(req: Request, res: Response) {
@@ -71,7 +72,7 @@ const controller = {
       return res.json({ message: `Product ${name} updated successfully` });
     } catch (err) {
       console.error(err);
-      return res.status(500).json({ message: "Internal server error" });
+      return res.status(500).json(MESSAGE.ERROR.SERVER_ERROR);
     }
   },
   async delete(req: Request, res: Response) {
@@ -82,7 +83,7 @@ const controller = {
       return res.json({ message: `Product ${name} deleted successfully` });;
     } catch (err) {
       console.error(err);
-      return res.status(500).json({ message: "Internal server error" });
+      return res.status(500).json(MESSAGE.ERROR.SERVER_ERROR);
     }
   },
 };

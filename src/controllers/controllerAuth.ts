@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { secret } from '../configs/secret';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import MESSAGE from "../constants/messages";
 
 const controller = {
   async login(req: Request, res: Response) {
@@ -13,11 +14,11 @@ const controller = {
     });
 
     if (!user) {
-      return res.status(400).json("Email not found!");
+      return res.status(400).json(MESSAGE.ERROR.EMAIL_ERROR);
     }
 
     if (!bcrypt.compareSync(password, user.password)) {
-      return res.status(401).json("Wrong Password!");
+      return res.status(401).json(MESSAGE.ERROR.PASSWORD_ERROR);
     }
 
     const token = jwt.sign(

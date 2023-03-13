@@ -1,5 +1,4 @@
-import Joi from 'joi';
-import { validate } from 'express-validation'
+import { validate, Joi } from 'express-validation'
 
 module.exports = validate({
   body: Joi.object({

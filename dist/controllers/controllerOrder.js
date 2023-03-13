@@ -32,7 +32,7 @@ const controller = {
         return __awaiter(this, void 0, void 0, function* () {
             const orders = yield models_1.Order.find().populate({
                 path: "category",
-                select: "description",
+                select: "name",
             }); // não sei qual o parametro correto;
             return res.json(orders);
         });
