@@ -10,6 +10,7 @@ const routesProduct_1 = __importDefault(require("../../routes/routesProduct"));
 const routesAuth_1 = __importDefault(require("../../routes/routesAuth"));
 const routesBrand_1 = __importDefault(require("../../routes/routesBrand"));
 const routesOrder_1 = __importDefault(require("../../routes/routesOrder"));
+const routesUserOrder_1 = __importDefault(require("../../routes/routesUserOrder"));
 const routes = (0, express_1.Router)();
 routes.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
@@ -23,4 +24,5 @@ routes.use(routesProduct_1.default);
 routes.use(routesAuth_1.default);
 routes.use(routesBrand_1.default);
 routes.use(routesOrder_1.default);
+routes.use(routesUserOrder_1.default);
 exports.default = routes;

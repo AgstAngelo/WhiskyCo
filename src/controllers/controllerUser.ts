@@ -28,7 +28,11 @@ const controller = {
     try {
       const { name, email, cpf, address, password, isAdmin } = req.body;
       const newPassword = bcrypt.hashSync(password, 8);
-
+      const existingEmail = await User.findOne({ email });
+  
+      if (existingEmail) {
+        return res.status(400).json({ message: "email already registered!" });
+      }
       const newUser = await User.create({
         name,
         email,

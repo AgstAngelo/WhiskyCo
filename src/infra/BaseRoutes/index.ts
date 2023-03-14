@@ -5,6 +5,7 @@ import productRoutes from "../../routes/routesProduct";
 import authRoutes from "../../routes/routesAuth";
 import brandRoutes from "../../routes/routesBrand";
 import orderRoutes from "../../routes/routesOrder";
+import userOrdersRoutes from "../../routes/routesUserOrder";
 import Express, { Application, Request, Response, NextFunction } from "express";
 
 
@@ -25,5 +26,6 @@ routes.use(productRoutes);
 routes.use(authRoutes);
 routes.use(brandRoutes);
 routes.use(orderRoutes);
+routes.use(userOrdersRoutes);
 
 export default routes;

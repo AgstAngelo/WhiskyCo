@@ -1,14 +1,15 @@
 import { Request, Response } from "express";
 import { Order } from "../models";
+import tokenUserId from "../middlewares/tokenUserId";
 
 const controller = {
   async create(req: Request, res: Response) {
     try {
-      const { userId, orders, amount } = req.body;
+      const { userId, products, amount } = req.body;
 
       const newOrder = await Order.create({
         userId,
-        orders,
+        products,
         amount,
       });
       return res.status(201).json(newOrder);
@@ -20,9 +21,13 @@ const controller = {
   },
   async findAll(req: Request, res: Response) {
     const orders = await Order.find().populate({
-      path: "category",
+      path: "userId",
       select: "name",
-    }); // não sei qual o parametro correto;
+    })
+    .populate({
+      path: "products",
+      select: "name",
+    });
 
     return res.json(orders);
   },
@@ -41,13 +46,15 @@ const controller = {
   async update(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const { product } = req.body;
+      const { userId, products, amount } = req.body;
       const updated = await Order.updateOne(
         {
           _id: id,
         },
         {
-          product,
+          userId,
+          products,
+          amount,
         }
       );
       return res.json({ message: `order upateded successfully` });
@@ -64,6 +71,21 @@ const controller = {
     } catch (err) {
       console.error(err);
       return res.status(400).json({ message: "No order found" });
+    }
+  },
+  async getOrders(req: Request, res: Response) {
+    try {
+      
+      const userId = tokenUserId(req);
+      console.log(userId);
+      if (!userId) {
+        return res.status(401).json({ message: 'Missing token' });
+      }
+      const orders = await Order.find({ userId: userId }).populate("products");
+
+      return res.status(200).json(orders);
+    } catch (error) {
+      return res.status(500).json({ message: error });
     }
   },
 };

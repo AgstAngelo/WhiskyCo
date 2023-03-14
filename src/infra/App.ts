@@ -2,7 +2,6 @@ import Express, { Application, Request, Response, NextFunction } from "express";
 import { mongoDB } from "../database";
 import BaseRoutes from "./BaseRoutes";
 import multer from "multer";
-//import storage from "../middlewares/upload";
 
 type SetupOptions = {
   isTest?: boolean;
@@ -23,7 +22,6 @@ export default class App {
     this.instance.use(Express.json());
     this.instance.use(BaseRoutes);
 
-    //this.instance.use(multer({ storage: storage }).single("picture"));
 
     if (options.isTest) return;
 

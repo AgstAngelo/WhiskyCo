@@ -8,16 +8,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const models_1 = require("../models");
+const tokenUserId_1 = __importDefault(require("../middlewares/tokenUserId"));
 const controller = {
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { userId, orders, amount } = req.body;
+                const { userId, products, amount } = req.body;
                 const newOrder = yield models_1.Order.create({
                     userId,
-                    orders,
+                    products,
                     amount,
                 });
                 return res.status(201).json(newOrder);
@@ -31,9 +35,13 @@ const controller = {
     findAll(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const orders = yield models_1.Order.find().populate({
-                path: "category",
+                path: "userId",
                 select: "name",
-            }); // não sei qual o parametro correto;
+            })
+                .populate({
+                path: "products",
+                select: "name",
+            });
             return res.json(orders);
         });
     },
@@ -56,11 +64,13 @@ const controller = {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { id } = req.params;
-                const { product } = req.body;
+                const { userId, products, amount } = req.body;
                 const updated = yield models_1.Order.updateOne({
                     _id: id,
                 }, {
-                    product,
+                    userId,
+                    products,
+                    amount,
                 });
                 return res.json({ message: `order upateded successfully` });
             }
@@ -80,6 +90,22 @@ const controller = {
             catch (err) {
                 console.error(err);
                 return res.status(400).json({ message: "No order found" });
+            }
+        });
+    },
+    getOrders(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const userId = (0, tokenUserId_1.default)(req);
+                console.log(userId);
+                if (!userId) {
+                    return res.status(401).json({ message: 'Missing token' });
+                }
+                const orders = yield models_1.Order.find({ userId: userId }).populate("products");
+                return res.status(200).json(orders);
+            }
+            catch (error) {
+                return res.status(500).json({ message: error });
             }
         });
     },
