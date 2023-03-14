@@ -13,8 +13,12 @@ interface IOrder {
 const orderSchema = new Schema<IOrder>(
     {
         userId:  { type: Schema.Types.ObjectId, required: true, ref: "User" },
-        products: [ { type: Schema.Types.ObjectId, required: true, ref: "Product" }],
-          
+        products: [
+          {
+            _id: { type: Schema.Types.ObjectId, required: true, ref: "Product" },
+            quantity: { type: Number, required: true },
+          },
+        ],       
         
         amount: { type: Number, required: true },
       },
