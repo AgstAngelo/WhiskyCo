@@ -2,7 +2,10 @@ import { Schema, model, Types } from "mongoose";
 
 interface IOrder {
     userId: Types.ObjectId;
-    products: [Types.ObjectId];
+    products: {
+      _id: Types.ObjectId,
+      quantity: number
+    }[];
     amount: number;
     
   }

@@ -83,6 +83,8 @@ const controller = {
       }
       const orders = await Order.find({ userId: userId }).populate("products");
 
+      
+
       return res.status(200).json(orders);
     } catch (error) {
       return res.status(500).json({ message: error });
