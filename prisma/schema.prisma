@@ -32,10 +32,10 @@ model Product {
   description  String?   @db.Text
   
   category     Category  @relation(fields: [category_id], references: [id])
-  category_id  String
+  category_id  String    @db.Char(36)
 
   brand        Brand     @relation(fields: [brand_id], references: [id])
-  brand_id     String
+  brand_id     String    @db.Char(36)
 
   @@unique([name, price])
 
@@ -50,7 +50,7 @@ model Order {
   dividedIn  Int?     @db.TinyInt
 
   user  User  @relation(fields: [order_id], references: [id])
-  order_id    String
+  order_id    String  @db.Char(36)
 
   @@map("orders")
 }
@@ -90,8 +90,8 @@ model Address {
   complement    String?  @db.VarChar(100)
   main_address  Boolean  @db.Bit(1)
 
-  user        User      @relation(fields: [user_id], references: [id])
-  user_id     String
+  user        User       @relation(fields: [user_id], references: [id])
+  user_id     String     @db.Char(36)
 
   @@map("addresses")
 }
