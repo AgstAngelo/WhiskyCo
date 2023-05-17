@@ -20,16 +20,19 @@ model User {
   
   user_addresses  Address[]
   user_orders     Order[]
+  user_access     Refresh?
 
   @@map("users")
 }
 
 model Refresh {
-  jwt_id     String  @default(uuid())  @db.Char(36)
-  user_id    String  @default(uuid())  @db.Char(36)
-  expiresIn  String  @db.TinyText
+  id           String  @id  @default(uuid())  @db.Char(36)
+  jwt_id       String  @default(uuid())  @db.Char(36)
 
-  @@unique([jwt_id, user_id])
+  user_access  User    @relation(fields: [user_id], references: [id])
+  user_id      String  @unique
+
+  expiresIn    String  @db.TinyText
 
   @@map("refresh")
 }
