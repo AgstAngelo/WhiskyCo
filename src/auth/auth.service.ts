@@ -29,7 +29,7 @@ export class AuthService {
       throw new ForbiddenException("Invalid user email/password");
     }
     
-    return this.signTokens(user.id, user.isAdmin);
+    return this.grantTokens(user.id, user.isAdmin);
   }
   
   async register(dto: regDTO) {
@@ -55,7 +55,7 @@ export class AuthService {
     }
   }
 
-  async signTokens(userId: string,isAdmin: boolean)
+  async grantTokens(userId: string,isAdmin: boolean)
   : Promise<{access_token: string, refresh_token: string}> {   
     const access_options = {
     expiresIn: this.config.get("JWT_EXP"),
@@ -73,17 +73,32 @@ export class AuthService {
       userType: isAdmin ? "admin" : "user"
     }
 
-    await this.prisma.refresh.create({
-      data: {
-        jwt_id: new_jwtid,
-        user_id: userId,
-        expiresIn: this.config.get("JWT_REFRESH_EXP")
-      }
-    })
+    const access_token = this.jwt.sign(payload, access_options)
+    const refresh_token = this.jwt.sign(payload, refresh_options);
 
-    const access_token = await this.jwt.signAsync(payload, access_options);
-    const refresh_token = await this.jwt.signAsync(payload, refresh_options);
-
+    this.insertRefresh(refresh_token);
+    
     return { access_token, refresh_token }
+  }
+  
+  async insertRefresh(refreshToken: string): Promise<void> {
+    try {
+      const payload = Object
+      .fromEntries(
+        Object.entries(
+          this.jwt.decode(refreshToken)
+      ));
+
+      console.log(payload)
+      await this.prisma.refresh.create({
+        data: {
+          jwt_id: payload.jti,
+          user_id: payload.sub,
+          exp: payload.exp
+        }
+      })
+    } catch (e) {
+      console.log(e);
+    }
   }
 }
