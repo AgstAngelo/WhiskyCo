@@ -1,5 +1,5 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { loginDTO, regDTO } from './dto/index';
+import { loginDTO } from './dto/index';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/Prisma/prisma.service';
@@ -14,7 +14,8 @@ export class AuthService {
     private config: ConfigService
   ) {}
 
-  async signIn(dto: loginDTO) {
+  async signIn(dto: loginDTO)
+  : Promise<{access_token: string, refresh_token: string}> {
     const user = await this.prisma.user.findUnique({
       where: {
         email: dto.email
@@ -30,29 +31,6 @@ export class AuthService {
     }
     
     return this.grantTokens(user.id, user.isAdmin);
-  }
-  
-  async register(dto: regDTO) {
-    const hash = bcrypt.hashSync(dto.password, Number(this.config.get("SALT")));
-    try {
-      const user = await this.prisma.user.create({
-        data: {
-          ...dto,
-          password: hash
-        }
-      });
-
-      return user;
-
-    } catch (error) {
-      if(error.code === "P2002") {
-        throw new ForbiddenException(
-          `Constraint Violation: ${
-            error.meta.target.split("_")[1]
-          } already in use.`
-        );
-      }
-    }
   }
 
   async grantTokens(userId: string,isAdmin: boolean)
@@ -89,16 +67,30 @@ export class AuthService {
           this.jwt.decode(refreshToken)
       ));
 
-      console.log(payload)
       await this.prisma.refresh.create({
         data: {
           jwt_id: payload.jti,
           user_id: payload.sub,
           exp: payload.exp
         }
-      })
-    } catch (e) {
-      console.log(e);
+      });
+
+    } catch (error) {
+      throw new ForbiddenException(error);
+    }
+  }
+
+  async logout(userId: string): Promise<Object> {
+    try {
+      await this.prisma.refresh.delete({
+        where: {
+          user_id: userId
+        }
+      });
+      return { message: "logout successfuly" };
+
+    } catch (error) {
+      throw new ForbiddenException(error);
     }
   }
 }
