@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { PrismaService } from 'src/Prisma/prisma.service';
 import { userDTO } from './dto/user.dto';
 import * as bcrypt from 'bcrypt';
+import { zonedTimeToUtc } from 'date-fns-tz';
 
 @Injectable()
 export class UserService {
@@ -51,5 +52,28 @@ export class UserService {
     }
     
     return user;
+  }
+
+  async findMe() {
+    
+  }
+
+  async updateUser(userId: string, user: userDTO) {
+    try {
+      await this.prisma.user.update({
+        where: {
+          id: userId
+        },
+        data: {
+          ...user,
+          updatedAt: zonedTimeToUtc(new Date(), 'UTC')
+        }
+      });
+
+      return { message: "user updated successfuly"};
+
+    } catch (error) {
+      throw new ForbiddenException(error);
+    }
   }
 }
